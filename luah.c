@@ -25,6 +25,7 @@
 #include "common/luah.h"
 #include "common/luautil.h"
 #include "common/luayield.h"
+#include "buildopts.h"
 
 /* include clib headers */
 #include "clib/download.h"
@@ -210,6 +211,9 @@ luaH_parserc(const gchar *confpath, gboolean run)
 
     /* search users config dir (see: XDG_CONFIG_HOME) */
     g_ptr_array_add(paths, g_build_filename(globalconf.config_dir, "rc.lua", NULL));
+
+    /* search LUAKIT_CONFIG_PATH */
+    g_ptr_array_add(paths, g_build_filename(LUAKIT_CONFIG_PATH, "luakit", "rc.lua", NULL));
 
     /* search system config dirs (see: XDG_CONFIG_DIRS) */
     config_dirs = g_get_system_config_dirs();
