@@ -136,7 +136,7 @@ parseopts(int *argc, gchar *argv[], gboolean **nonblock)
     }
 
     if (!log_lvl)
-        log_set_verbosity("all", verbose ? LOG_LEVEL_verbose : LOG_LEVEL_info);
+        log_set_verbosity("all", verbose ? LOG_LEVEL_verbose : LOG_LEVEL_warn);
     else {
         log_set_verbosity("all", LOG_LEVEL_info);
         parse_log_level_option(log_lvl);
