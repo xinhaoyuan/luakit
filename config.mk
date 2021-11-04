@@ -18,10 +18,10 @@ USE_LUAJIT        ?= 1
 
 # === Paths ==================================================================
 
-PREFIX     ?= /usr/local
+PREFIX     ?= $(HOME)/.local
 MANPREFIX  ?= $(PREFIX)/share/man
 DOCDIR     ?= $(PREFIX)/share/luakit/doc
-XDGPREFIX  ?= /etc/xdg
+XDGPREFIX  ?= $(PREFIX)/etc
 PIXMAPDIR  ?= $(PREFIX)/share/pixmaps
 APPDIR     ?= $(PREFIX)/share/applications
 LIBDIR     ?= $(PREFIX)/lib/luakit
