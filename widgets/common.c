@@ -93,6 +93,7 @@ scroll_cb(GtkWidget *UNUSED(wid), GdkEventScroll *ev, widget_t *w)
 gboolean
 mouse_cb(GtkWidget* UNUSED(win), GdkEventCrossing *ev, widget_t *w)
 {
+    if (ev->detail == GDK_NOTIFY_INFERIOR) return FALSE;
     lua_State *L = common.L;
     luaH_object_push(L, w->ref);
     luaH_modifier_table_push(L, ev->state);
