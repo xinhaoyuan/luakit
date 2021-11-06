@@ -134,10 +134,12 @@ local function new(view, index)
     end
 
     tl.widget:add_signal("mouse-enter", function (t)
+        label.fg = theme.tab_hover_fg or theme.tab_fg
         t.bg = theme.tab_hover_bg
     end)
     tl.widget:add_signal("mouse-leave", function (t)
         local priv = data[tl]
+        label.fg = (priv.current and theme.tab_selected_fg) or theme.tab_fg
         if priv.view.private then
             t.bg = (priv.current and theme.selected_private_tab_bg) or theme.private_tab_bg
         else
