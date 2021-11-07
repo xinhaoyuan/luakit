@@ -32,6 +32,8 @@ luaH_checkimage(lua_State *L, gint udx)
     return w;
 }
 
+#define FORCE_HIDPI 1
+
 static gint
 luaH_image_set_from_file_name(lua_State *L)
 {
@@ -46,7 +48,7 @@ luaH_image_set_from_file_name(lua_State *L)
         return luaL_error(L, "unable to find image file");
 
     /* Detect @2x file if on HiDPI screen */
-    if (scale == 2) {
+    if (FORCE_HIDPI || scale == 2) {
         const gchar *ext = strrchr(path, '.') ?: &path[strlen(path)];
         x2_path = g_strdup_printf("%.*s@2x%s", (int)(ext - path), path, ext);
         if (!g_file_test(x2_path, G_FILE_TEST_IS_REGULAR)) {
