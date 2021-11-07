@@ -265,6 +265,11 @@ completers.command = {
                     end
                 end
 
+                -- The goal is to order the list by length so the
+                -- perfect match, if exists, can be pushed in the
+                -- return value by the following loop.
+                table.sort(c)
+
                 for i, cmd in ipairs(c) do
                     if string.find(cmd, prefix, 1, true) == 1 then
                         if i == 1 then
@@ -273,7 +278,7 @@ completers.command = {
                             cmd = string.format(":%s (:%s)", cmd, c[1])
                         end
 
-                        local format = c[1] .. (a.format and (" "..a.format) or "")
+                        local format = c[i] .. (a.format and (" "..a.format) or "")
                         cmds[cmd] = { escape(cmd), escape(m[2].desc) or "", format = format }
                         break
                     end
