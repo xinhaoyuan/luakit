@@ -235,14 +235,24 @@ luaH_widget_set_child(lua_State *L, widget_t *w)
 gint
 luaH_widget_get_child(lua_State *L, widget_t *w)
 {
-    GtkWidget *widget = gtk_bin_get_child(GTK_BIN(w->widget));
+    GtkWidget* parent_widget = w->widget;
+    while (1) {
+        GtkWidget* child_widget = gtk_bin_get_child(GTK_BIN(parent_widget));
 
-    if (!widget)
-        return 0;
+        if (!child_widget)
+            return 0;
 
-    widget_t *child = GOBJECT_TO_LUAKIT_WIDGET(widget);
-    luaH_object_push(L, child->ref);
-    return 1;
+        widget_t *child = GOBJECT_TO_LUAKIT_WIDGET(child_widget);
+        // gtk_container_add will some times "smartly" add widget in
+        // the middle (e.g. ScrolledWindow), which we need to skip.
+        if (!child) {
+            parent_widget = child_widget;
+            continue;
+        }
+
+        luaH_object_push(L, child->ref);
+        return 1;
+    }
 }
 
 gint
