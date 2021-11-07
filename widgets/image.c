@@ -88,13 +88,17 @@ fallback:
 
     float src_w = cairo_image_surface_get_width(source);
     float src_h = cairo_image_surface_get_height(source);
+    int width, height;
+    gtk_widget_get_size_request(w->widget, &width, &height);
+    if (width == -1) width = src_w;
+    if (height == -1) height = src_h;
 
-    cairo_surface_t *target = cairo_surface_create_similar(source,
-            CAIRO_CONTENT_COLOR_ALPHA, src_w, src_h);
+    cairo_surface_t *target = cairo_surface_create_similar(
+        source, CAIRO_CONTENT_COLOR_ALPHA, width * scale, height * scale);
     cairo_surface_set_device_scale(target, scale, scale);
 
     cairo_t *cr = cairo_create(target);
-    cairo_scale(cr, 1/scale, 1/scale);
+    cairo_scale(cr, width/src_w, height/src_h);
     cairo_set_source_surface(cr, source, 0, 0);
     cairo_surface_set_device_offset(source, 0, 0);
     cairo_paint(cr);
@@ -163,14 +167,17 @@ luaH_image_set_favicon_for_uri_finished(WebKitFaviconDatabase *fdb, GAsyncResult
     float src_w = cairo_image_surface_get_width(source);
     float src_h = cairo_image_surface_get_height(source);
     float scale = gtk_widget_get_scale_factor(w->widget);
-    float log_sz = 16, dev_sz = log_sz*scale;
+    int width, height;
+    gtk_widget_get_size_request(w->widget, &width, &height);
+    if (width == -1) width = 16;
+    if (height == -1) height = width;
 
     cairo_surface_t *target = cairo_surface_create_similar(source,
-            CAIRO_CONTENT_COLOR_ALPHA, dev_sz, dev_sz);
+            CAIRO_CONTENT_COLOR_ALPHA, width * scale, height * scale);
     cairo_surface_set_device_scale(target, scale, scale);
 
     cairo_t *cr = cairo_create(target);
-    cairo_scale(cr, log_sz/src_w, log_sz/src_h);
+    cairo_scale(cr, width/src_w, height/src_h);
     cairo_set_source_surface(cr, source, 0, 0);
     cairo_surface_set_device_offset(source, 0, 0);
     cairo_paint(cr);
